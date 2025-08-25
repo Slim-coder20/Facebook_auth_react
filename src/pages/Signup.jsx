@@ -1,13 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button/Button";
 import Logo from "../components/Logo/Logo";
 import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+import { toast } from "react-toastify";
 
 export default function Home() {
   // States //
   //const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // UseForm //
 
@@ -16,6 +20,8 @@ export default function Home() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const navigate = useNavigate();
 
   // Cycles : useRef //
   // const email = useRef("");
@@ -32,8 +38,27 @@ export default function Home() {
   // }, [email]);
 
   // Function
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    if (loading) return;
+    setLoading(true);
+
+    await createUserWithEmailAndPassword(auth, data.email, data.password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+        setLoading(false);
+        navigate("/?success=true");
+      })
+      .catch((error) => {
+        const { code, message } = error;
+        if (code == "auth/email-already-in-use") {
+          toast.error("Cet email est utilisé .");
+        } else {
+          toast.error(code);
+        }
+        setLoading(false);
+      });
+
     //event.preventDefault();
 
     // let isValid = true;
@@ -120,7 +145,9 @@ export default function Home() {
             {errors.password && (
               <p className=" text-red-400 mb-10">{errors.password.message}</p>
             )}
-            <Button large>S&#39;inscrire</Button>
+            <Button large disabled={loading}>
+              S&#39;inscrire
+            </Button>
           </form>
 
           {/* Pass */}
