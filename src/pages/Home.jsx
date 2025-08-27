@@ -3,6 +3,8 @@ import Button from "../components/Button/Button";
 import Logo from "../components/Logo/Logo";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../store/AuthProvider";
 
 export default function Home() {
   // State //
@@ -15,9 +17,29 @@ export default function Home() {
     formState: { errors },
   } = useForm();
 
+  const { loginUser } = useContext(AuthContext);
+
+  // State
+  const [loading, setLoading] = useState(false);
+
   // Fonction //
   const onSubmit = (data) => {
-    console.log(data);
+    if (loading) return;
+    loginUser(data.email, data.password)
+      .then((userCredential) => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        const { code, message } = error;
+        if (code == "auth/user-not-found") {
+          toast.error("Cet email n'existe pas.");
+        } else if (code == "auth/invalid-credential") {
+          toast.error("La combinaison est incorrect.");
+        } else {
+          toast.error(code);
+        }
+      });
   };
 
   return (

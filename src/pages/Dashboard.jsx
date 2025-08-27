@@ -6,7 +6,7 @@ import { AuthContext } from "../store/AuthProvider";
 
 export default function Dashboard() {
   // Variables //
-  const { logOut } = useContext(AuthContext);
+  const { logOut, loading  } = useContext(AuthContext);
   return (
     <>
       <div className="flex lg:flex-row flex-col lg:gap-0 gap-10 min-h-screen items-center lg:justify-normal justify-center p-10 max-w-6xl mx-auto">
@@ -22,7 +22,7 @@ export default function Dashboard() {
           <div className="element lg:w-[400px] w-full">
             {/* logout */}
             <div className="flex justify-center">
-              <Button green onClick={ () => logOut()}>Déconnexion</Button>
+              <Button green onClick={ () => logOut()} disabled={loading}>Déconnexion</Button>
             </div>
           </div>
         </div>
