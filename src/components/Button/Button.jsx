@@ -1,6 +1,13 @@
-export default function Button({ children, large = false, green = false, disabled }) {
+export default function Button({ children, 
+    large = false, 
+    green = false, 
+    disabled, 
+    onClick, 
+
+}) {
     return (
         <button
+            onClick={onClick}
             className={`${
                 green
                     ? "bg-green-500 hover:bg-opacity-80"

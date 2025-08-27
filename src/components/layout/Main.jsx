@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../store/AuthProvider";
+import { ClipLoader } from "react-spinners";
 
 export default function Main() {
   // Variables //
@@ -8,7 +9,7 @@ export default function Main() {
   if (loading) {
     return (
       <div className=" flex justify-center items-center h-screen ">
-        chargement..
+        < ClipLoader />
       </div>
     );
   }

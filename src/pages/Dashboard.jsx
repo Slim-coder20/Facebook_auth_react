@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
 import Button from "../components/Button/Button";
 import Logo from "../components/Logo/Logo";
+import { useContext } from "react";
+import { AuthContext } from "../store/AuthProvider";
 
 export default function Dashboard() {
+  // Variables //
+  const { logOut } = useContext(AuthContext);
   return (
     <>
       <div className="flex lg:flex-row flex-col lg:gap-0 gap-10 min-h-screen items-center lg:justify-normal justify-center p-10 max-w-6xl mx-auto">
@@ -18,9 +22,7 @@ export default function Dashboard() {
           <div className="element lg:w-[400px] w-full">
             {/* logout */}
             <div className="flex justify-center">
-              <Link to="/signup">
-                <Button green>Déconnexion</Button>
-              </Link>
+              <Button green onClick={ () => logOut()}>Déconnexion</Button>
             </div>
           </div>
         </div>
